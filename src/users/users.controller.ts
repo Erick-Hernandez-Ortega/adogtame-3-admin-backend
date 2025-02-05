@@ -3,6 +3,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { User } from './schemas/user.schema';
 
 @ApiTags('users')
 @Controller('users')
@@ -21,8 +22,9 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  @ApiOperation({ summary: 'Obtener un usuario por su ID' })
+  findOne(@Param('id') id: string): Promise<User> {
+    return this.usersService.findOne(id);
   }
 
   @Patch(':id')

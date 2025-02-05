@@ -23,8 +23,16 @@ export class UsersService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string): Promise<User> {
+    try {
+      const user: User = await this.userModel.findById(id).exec();
+      
+      if (!user) throw new HttpException('No se encontró el usuario', HttpStatus.NOT_FOUND);
+
+      return user;
+    } catch (error: any) {
+      throw new HttpException(`Error al obtener el usuario: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
