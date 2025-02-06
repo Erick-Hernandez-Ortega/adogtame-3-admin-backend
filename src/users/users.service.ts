@@ -11,7 +11,7 @@ export class UsersService {
     @InjectModel(User.name) private readonly userModel: Model<User>
   ) { }
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto): Promise<any> {
     const userExists = await this.userModel.findOne({ email: createUserDto.email, username: createUserDto.username }).exec();
 
     if (userExists) {
@@ -52,7 +52,17 @@ export class UsersService {
     return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string): Promise<any> {
+    const user = await this.userModel.findById(id).exec();
+
+    if (!user) throw new HttpException('No se encontró el usuario', HttpStatus.NOT_FOUND);
+
+    try {
+      await this.userModel.findByIdAndDelete(id).exec();
+    
+      return { message: 'Usuario eliminado correctamente' };
+    } catch (error: any) {
+      throw new HttpException(`Error al eliminar el usuario: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }
