@@ -9,10 +9,23 @@ import { Model } from 'mongoose';
 export class UsersService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>
-  ) {}
+  ) { }
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(createUserDto: CreateUserDto) {
+    const userExists = await this.userModel.findOne({ email: createUserDto.email, username: createUserDto.username }).exec();
+
+    if (userExists) {
+      throw new HttpException('El usuario ya existe', HttpStatus.CONFLICT);
+    }
+
+    try {
+      const user = new this.userModel(createUserDto);
+      await user.save();
+  
+      return { message: 'Usuario creado correctamente' };
+    } catch (error: any) {
+      throw new HttpException(`Error al crear el usuario: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async findAll(): Promise<User[]> {
@@ -26,7 +39,7 @@ export class UsersService {
   async findOne(id: string): Promise<User> {
     try {
       const user: User = await this.userModel.findById(id).exec();
-      
+
       if (!user) throw new HttpException('No se encontró el usuario', HttpStatus.NOT_FOUND);
 
       return user;
