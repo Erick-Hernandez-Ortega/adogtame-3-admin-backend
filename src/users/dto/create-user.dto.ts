@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { IsEmail, IsNotEmpty, IsNumberString, MaxLength, MinLength } from "class-validator";
+import { IsEmail, IsNotEmpty, IsNumberString, IsOptional, MaxLength, MinLength } from "class-validator";
 
 export class CreateUserDto {
     @ApiProperty({ example: 'Erick', description: 'Nombre del usuario' })
@@ -35,11 +35,10 @@ export class CreateUserDto {
     password: string;
 
     @ApiPropertyOptional({ example: 'default.png', description: 'Imagen de perfil' })
+    @IsOptional()
     imagen?: string;
 
     @ApiPropertyOptional({ example: false, description: 'Indica si el token fue eliminado' })
+    @IsOptional()
     isTokenRemoved?: boolean;
-
-    @ApiPropertyOptional({ example: new Date(), description: 'Fecha de creación' })
-    date?: Date;
 }
