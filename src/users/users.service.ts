@@ -19,7 +19,10 @@ export class UsersService {
     }
 
     try {
-      const user = new this.userModel(createUserDto);
+      const user = new this.userModel({
+        ...createUserDto,
+        date: new Date()
+      });
       await user.save();
   
       return { message: 'Usuario creado correctamente' };
