@@ -51,8 +51,18 @@ export class UsersService {
     }
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const userExists: User = await this.userModel.findById(id).exec();
+
+    if (!userExists) throw new HttpException('No se encontró el usuario', HttpStatus.NOT_FOUND);
+
+    try {
+      await this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true }).exec();
+    
+      return { message: 'Usuario actualizado correctamente' };
+    } catch (error: any) {
+      throw new HttpException(`Error al actualizar el usuario: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async remove(id: string): Promise<any> {
