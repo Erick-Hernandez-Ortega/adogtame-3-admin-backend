@@ -23,8 +23,17 @@ export class PetsService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} pet`;
+  async findOne(id: string): Promise<Pet> {
+    try {
+      const pet: Pet = await this.petModel.findById(id).lean().select('-__v').exec();
+
+      if (!pet) throw new HttpException('No se encontró la mascota', HttpStatus.NOT_FOUND);
+
+      return pet;
+    } catch (error: any) {
+      const errorCode: number = error?.status === 404 ? HttpStatus.NOT_FOUND : HttpStatus.INTERNAL_SERVER_ERROR
+      throw new HttpException(`Error al obtener la mascota: ${error.message}`, errorCode);
+    }
   }
 
   update(id: number, updatePetDto: UpdatePetDto) {
