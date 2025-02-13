@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-@Schema()
+@Schema({ timestamps: true })
 export class User extends Document {
     @Prop({ required: true })
     name: string;
@@ -23,9 +23,6 @@ export class User extends Document {
   
     @Prop({ default: false })
     isTokenRemoved: boolean;
-  
-    @Prop({ default: Date.now })
-    date: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
