@@ -4,15 +4,28 @@ import { UpdatePetDto } from './dto/update-pet.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Pet } from './schemas/pet.schema';
 import { Model } from 'mongoose';
+import { User } from 'src/users/schemas/user.schema';
 
 @Injectable()
 export class PetsService {
   constructor(
-    @InjectModel(Pet.name) private readonly petModel: Model<Pet>
+    @InjectModel(Pet.name) private readonly petModel: Model<Pet>,
+    @InjectModel(User.name) private readonly userModel: Model<User>
   ) { }
 
-  create(createPetDto: CreatePetDto) {
-    return 'This action adds a new pet';
+  async create(createPetDto: CreatePetDto): Promise<any> {
+    const user: User = await this.userModel.findById(createPetDto.owner).exec();
+
+    if (!user) throw new HttpException('No se encontró el usuario dueño', HttpStatus.NOT_FOUND);
+
+    try {
+      const pet: Pet = new this.petModel(createPetDto);
+      await pet.save();
+
+      return { message: 'Mascota creada correctamente' };
+    } catch (error: any) {
+      throw new HttpException(`Error al crear la mascota: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async findAll(): Promise<Pet[]> {
