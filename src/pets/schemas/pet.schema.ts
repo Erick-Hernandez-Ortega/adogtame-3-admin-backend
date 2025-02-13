@@ -34,8 +34,8 @@ export class Pet extends Document {
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   owner: User;
 
-  @Prop({ type: Buffer })
-  image?: Buffer;
+  @Prop({ type: String })
+  image?: string;
 
   @Prop({ type: String })
   contentType?: string;
