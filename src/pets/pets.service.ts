@@ -9,7 +9,7 @@ import { Model } from 'mongoose';
 export class PetsService {
   constructor(
     @InjectModel(Pet.name) private readonly petModel: Model<Pet>
-  ) {}
+  ) { }
 
   create(createPetDto: CreatePetDto) {
     return 'This action adds a new pet';
@@ -40,7 +40,17 @@ export class PetsService {
     return `This action updates a #${id} pet`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} pet`;
+  async remove(id: string): Promise<any> {
+    const pet = await this.petModel.findById(id).exec();
+
+    if (!pet) throw new HttpException('No se encontró la mascota', HttpStatus.NOT_FOUND);
+
+    try {
+      await this.petModel.findByIdAndDelete(id).exec();
+
+      return { message: 'Usuario eliminado correctamente' };
+    } catch (error: any) {
+      throw new HttpException(`Error al eliminar la mascota: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }

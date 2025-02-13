@@ -36,6 +36,6 @@ export class PetsController {
   @Delete(':id')
   @ApiOperation({ summary: 'Borrar una mascota por ID' })
   remove(@Param('id') id: string) {
-    return this.petsService.remove(+id);
+    return this.petsService.remove(id);
   }
 }
