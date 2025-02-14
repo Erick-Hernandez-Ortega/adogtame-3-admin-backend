@@ -30,7 +30,7 @@ export class PetsController {
   @Patch(':id')
   @ApiOperation({ summary: 'Actualizar una mascota por ID' })
   update(@Param('id') id: string, @Body() updatePetDto: UpdatePetDto) {
-    return this.petsService.update(+id, updatePetDto);
+    return this.petsService.update(id, updatePetDto);
   }
 
   @Delete(':id')

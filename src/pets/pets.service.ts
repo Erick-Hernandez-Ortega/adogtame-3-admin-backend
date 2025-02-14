@@ -49,8 +49,18 @@ export class PetsService {
     }
   }
 
-  update(id: number, updatePetDto: UpdatePetDto) {
-    return `This action updates a #${id} pet`;
+  async update(id: string, updatePetDto: UpdatePetDto): Promise<any> {
+    const pet = await this.petModel.findById(id).exec();
+
+    if (!pet) throw new HttpException('No se encontró la mascota', HttpStatus.NOT_FOUND);
+
+    try {
+      await this.petModel.findByIdAndUpdate(id, updatePetDto, { new: true }).exec();
+
+      return { message: 'Mascota actualizada correctamente' };
+    } catch (error: any) {
+      throw new HttpException(`Error al actualizar la mascota: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async remove(id: string): Promise<any> {
