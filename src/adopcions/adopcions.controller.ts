@@ -24,7 +24,7 @@ export class AdopcionsController {
   @Get(':id')
   @ApiOperation({ summary: 'Obtiene una adopcion por su id' })
   findOne(@Param('id') id: string) {
-    return this.adopcionsService.findOne(+id);
+    return this.adopcionsService.findOne(id);
   }
 
   @Patch(':id')

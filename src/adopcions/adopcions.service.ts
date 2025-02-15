@@ -46,8 +46,18 @@ export class AdopcionsService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} adopcion`;
+  async findOne(id: string): Promise<Adopcion> {
+    try {
+      const adopciones = await this.adopcionModel.findById(id)
+        .populate('petId', '-__v -updatedAt -createdAt')
+        .populate('userId', '-__v -password -updatedAt -createdAt')
+        .select('-__v -updatedAt')
+        .exec();
+
+      return adopciones;
+    } catch (error: any) {
+      throw new HttpException(`Error al obtener las adopciones: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   update(id: number, updateAdopcionDto: UpdateAdopcionDto) {
