@@ -47,6 +47,10 @@ export class AdopcionsService {
   }
 
   async findOne(id: string): Promise<Adopcion> {
+    const adopcion: Adopcion = await this.adopcionModel.findById(id).exec();
+
+    if (!adopcion) throw new HttpException('No se encontró la adopcion', HttpStatus.NOT_FOUND);
+
     try {
       const adopciones = await this.adopcionModel.findById(id)
         .populate('petId', '-__v -updatedAt -createdAt')
