@@ -64,7 +64,17 @@ export class AdopcionsService {
     return `This action updates a #${id} adopcion`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} adopcion`;
+  async remove(id: string): Promise<any> {
+    const adopcion = await this.adopcionModel.findById(id).exec();
+
+    if (!adopcion) throw new HttpException('No se encontró la adopcion', HttpStatus.NOT_FOUND);
+
+    try {
+      await this.adopcionModel.findByIdAndDelete(id).exec();
+
+      return { message: 'Adopcion eliminada correctamente' };
+    } catch (error: any) {
+      throw new HttpException(`Error al eliminar la adopcion: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }

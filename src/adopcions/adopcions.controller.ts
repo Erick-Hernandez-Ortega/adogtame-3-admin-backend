@@ -36,6 +36,6 @@ export class AdopcionsController {
   @Delete(':id')
   @ApiOperation({ summary: 'Borra una adopcion por su id' })
   remove(@Param('id') id: string) {
-    return this.adopcionsService.remove(+id);
+    return this.adopcionsService.remove(id);
   }
 }
