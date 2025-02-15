@@ -71,7 +71,7 @@ export class PetsService {
     try {
       await this.petModel.findByIdAndDelete(id).exec();
 
-      return { message: 'Usuario eliminado correctamente' };
+      return { message: 'Mascota eliminado correctamente' };
     } catch (error: any) {
       throw new HttpException(`Error al eliminar la mascota: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
