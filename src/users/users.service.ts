@@ -16,9 +16,7 @@ export class UsersService {
   async create(createUserDto: CreateUserDto): Promise<any> {
     const userExists = await this.userModel.findOne({ email: createUserDto.email, username: createUserDto.username }).exec();
 
-    if (userExists) {
-      throw new HttpException('El usuario ya existe', HttpStatus.CONFLICT);
-    }
+    if (userExists) throw new HttpException('El usuario ya existe', HttpStatus.CONFLICT);
 
     try {
       const user = new this.userModel(createUserDto);
