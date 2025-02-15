@@ -56,7 +56,7 @@ export class AdopcionsService {
 
       return adopciones;
     } catch (error: any) {
-      throw new HttpException(`Error al obtener las adopciones: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(`Error al obtener la adopcion: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
