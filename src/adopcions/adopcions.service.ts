@@ -13,7 +13,7 @@ export class AdopcionsService {
     @InjectModel(Adopcion.name) private readonly adopcionModel: Model<Adopcion>,
     @InjectModel(User.name) private readonly userModel: Model<User>,
     @InjectModel(Pet.name) private readonly petModel: Model<Pet>
-  ) {}
+  ) { }
 
   async create(createAdopcionDto: CreateAdopcionDto): Promise<any> {
     const pet: Pet = await this.petModel.findById(createAdopcionDto.petId).exec();
@@ -32,8 +32,18 @@ export class AdopcionsService {
     }
   }
 
-  findAll() {
-    return `This action returns all adopcions`;
+  async findAll(): Promise<Adopcion[]> {
+    try {
+      const adopciones = await this.adopcionModel.find()
+        .populate('petId', '-__v -updatedAt -createdAt')
+        .populate('userId', '-__v -password -updatedAt -createdAt')
+        .select('-__v -updatedAt')
+        .exec();
+
+      return adopciones;
+    } catch (error: any) {
+      throw new HttpException(`Error al obtener las adopciones: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   findOne(id: number) {
