@@ -3,12 +3,14 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
-import { Model } from 'mongoose';
+import { ClientSession, Model } from 'mongoose';
+import { Pet } from 'src/pets/schemas/pet.schema';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectModel(User.name) private readonly userModel: Model<User>
+    @InjectModel(User.name) private readonly userModel: Model<User>,
+    @InjectModel(Pet.name) private readonly petModel: Model<Pet>,
   ) { }
 
   async create(createUserDto: CreateUserDto): Promise<any> {
@@ -63,15 +65,23 @@ export class UsersService {
   }
 
   async remove(id: string): Promise<any> {
+    // TODO comprobrar si las mascotas asociadas estan adoptadas, si lo estan no eliminar mascotas, si no eliminar mascotas
     const user = await this.userModel.findById(id).exec();
 
     if (!user) throw new HttpException('No se encontró el usuario', HttpStatus.NOT_FOUND);
+    const session: ClientSession = await this.userModel.db.startSession();
+    session.startTransaction();
 
     try {
-      await this.userModel.findByIdAndDelete(id).exec();
+      await this.petModel.updateMany({ owner: id }, { owner: 'this user deleted' }).session(session).exec();
+      await this.userModel.findByIdAndDelete(id).session(session).exec();
+      await session.commitTransaction();
+      session.endSession();
     
       return { message: 'Usuario eliminado correctamente' };
     } catch (error: any) {
+      await session.abortTransaction();
+      session.endSession();
       throw new HttpException(`Error al eliminar el usuario: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
