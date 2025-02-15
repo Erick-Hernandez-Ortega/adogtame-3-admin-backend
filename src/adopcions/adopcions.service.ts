@@ -60,8 +60,18 @@ export class AdopcionsService {
     }
   }
 
-  update(id: number, updateAdopcionDto: UpdateAdopcionDto) {
-    return `This action updates a #${id} adopcion`;
+  async update(id: string, updateAdopcionDto: UpdateAdopcionDto): Promise<any> {
+    const adopcion = await this.adopcionModel.findById(id).exec();
+
+    if (!adopcion) throw new HttpException('No se encontró la adopcion', HttpStatus.NOT_FOUND);
+
+    try {
+      await this.adopcionModel.findByIdAndUpdate(id, updateAdopcionDto, { new: true }).exec();
+
+      return { message: 'Adopcion actualizada correctamente' };
+    } catch (error: any) {
+      throw new HttpException(`Error al actualizar la adopcion: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async remove(id: string): Promise<any> {

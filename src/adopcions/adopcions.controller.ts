@@ -30,7 +30,7 @@ export class AdopcionsController {
   @Patch(':id')
   @ApiOperation({ summary: 'Actualiza una adopcion por su id' })
   update(@Param('id') id: string, @Body() updateAdopcionDto: UpdateAdopcionDto) {
-    return this.adopcionsService.update(+id, updateAdopcionDto);
+    return this.adopcionsService.update(id, updateAdopcionDto);
   }
 
   @Delete(':id')
