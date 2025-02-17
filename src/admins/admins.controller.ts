@@ -24,7 +24,7 @@ export class AdminsController {
   @Get(':id')
   @ApiOperation({ summary: 'Obtener un administrador por ID' })
   findOne(@Param('id') id: string) {
-    return this.adminsService.findOne(+id);
+    return this.adminsService.findOne(id);
   }
 
   @Patch(':id')

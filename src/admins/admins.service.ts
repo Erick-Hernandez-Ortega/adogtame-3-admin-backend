@@ -42,8 +42,16 @@ export class AdminsService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} admin`;
+  async findOne(id: string): Promise<Admin> {
+    try {
+      const admin: Admin = await this.adminModel.findById(id).exec();
+
+      if (!admin) throw new HttpException('No se encontró el admin', HttpStatus.NOT_FOUND);
+
+      return admin;
+    } catch (error: any) {
+      throw new HttpException(`Error al obtener el admin: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   update(id: number, updateAdminDto: UpdateAdminDto) {
