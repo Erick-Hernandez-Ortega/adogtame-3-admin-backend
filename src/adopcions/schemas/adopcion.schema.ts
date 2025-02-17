@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
 
-@Schema({ timestamps: true, collection: 'adopcions' })
+@Schema({ timestamps: true, collection: 'adopcions', versionKey: false })
 export class Adopcion extends Document {
     @Prop({ type: Types.ObjectId, ref: 'Pet', required: true })
     petId: Types.ObjectId;
