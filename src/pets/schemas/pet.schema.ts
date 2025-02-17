@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { User } from 'src/users/schemas/user.schema';
 
-@Schema({ timestamps: true, collection: 'mascotas' })
+@Schema({ timestamps: true, collection: 'mascotas', versionKey: false })
 export class Pet extends Document {
   @Prop({ required: true })
   name: string;
