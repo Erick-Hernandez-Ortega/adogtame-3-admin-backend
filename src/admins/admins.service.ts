@@ -54,12 +54,22 @@ export class AdminsService {
     }
   }
 
-  update(id: number, updateAdminDto: UpdateAdminDto) {
-    return `This action updates a #${id} admin`;
+  async update(id: string, updateAdminDto: UpdateAdminDto): Promise<any> {
+    const adminExists: Admin = await this.adminModel.findById(id).exec();
+
+    if (!adminExists) throw new HttpException('No se encontró el admin', HttpStatus.NOT_FOUND);
+
+    try {
+      await this.adminModel.findByIdAndUpdate(id, updateAdminDto, { new: true }).exec();
+  
+      return { message: 'Admin actualizado correctamente' };
+    } catch (error: any) {
+      throw new HttpException(`Error al actualizar el admin: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
-  async remove(id: string) {
-    const adminExists = await this.adminModel.findById(id).exec();
+  async remove(id: string): Promise<any> {
+    const adminExists: Admin = await this.adminModel.findById(id).exec();
 
     if (!adminExists) throw new HttpException('No se encontró el admin', HttpStatus.NOT_FOUND);
 

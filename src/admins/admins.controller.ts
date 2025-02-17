@@ -30,7 +30,7 @@ export class AdminsController {
   @Patch(':id')
   @ApiOperation({ summary: 'Actualizar un administrador por ID' })
   update(@Param('id') id: string, @Body() updateAdminDto: UpdateAdminDto) {
-    return this.adminsService.update(+id, updateAdminDto);
+    return this.adminsService.update(id, updateAdminDto);
   }
 
   @Delete(':id')
