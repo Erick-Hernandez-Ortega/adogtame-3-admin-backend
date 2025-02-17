@@ -34,8 +34,12 @@ export class AdminsService {
     }
   }
 
-  findAll() {
-    return `This action returns all admins`;
+  async findAll(): Promise<Admin[]> {
+    try {
+      return await this.adminModel.find().exec();
+    } catch (error: any) {
+      throw new HttpException(`Error al obtener los admins: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   findOne(id: number) {
