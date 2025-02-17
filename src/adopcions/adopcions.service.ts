@@ -37,7 +37,6 @@ export class AdopcionsService {
       const adopciones = await this.adopcionModel.find()
         .populate('petId', '-__v -updatedAt -createdAt')
         .populate('userId', '-__v -password -updatedAt -createdAt')
-        .select('-__v -updatedAt')
         .exec();
 
       return adopciones;
@@ -55,7 +54,6 @@ export class AdopcionsService {
       const adopciones = await this.adopcionModel.findById(id)
         .populate('petId', '-__v -updatedAt -createdAt')
         .populate('userId', '-__v -password -updatedAt -createdAt')
-        .select('-__v -updatedAt')
         .exec();
 
       return adopciones;
