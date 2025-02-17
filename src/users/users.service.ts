@@ -1,10 +1,11 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { InjectModel } from '@nestjs/mongoose';
-import { User } from './schemas/user.schema';
 import { ClientSession, Model } from 'mongoose';
+import { CreateUserDto } from './dto/create-user.dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import { Pet } from 'src/pets/schemas/pet.schema';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './schemas/user.schema';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -19,8 +20,15 @@ export class UsersService {
     if (userExists) throw new HttpException('El usuario ya existe', HttpStatus.CONFLICT);
 
     try {
-      const user = new this.userModel(createUserDto);
-      await user.save();
+      const { password, ...rest } = createUserDto;
+
+      const salt: string = await bcrypt.genSalt();
+      const hashedPassword: string = await bcrypt.hash(password, salt);
+      const newUser: User = new this.userModel({
+        password: hashedPassword,
+        ...rest,
+      });
+      await newUser.save();
   
       return { message: 'Usuario creado correctamente' };
     } catch (error: any) {
