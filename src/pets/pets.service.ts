@@ -38,7 +38,7 @@ export class PetsService {
 
   async findOne(id: string): Promise<Pet> {
     try {
-      const pet: Pet = await this.petModel.findById(id).lean().select('-__v').exec();
+      const pet: Pet = await this.petModel.findById(id).exec();
 
       if (!pet) throw new HttpException('No se encontró la mascota', HttpStatus.NOT_FOUND);
 
