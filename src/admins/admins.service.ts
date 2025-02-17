@@ -1,11 +1,37 @@
-import { Injectable } from '@nestjs/common';
+import { Admin } from './schemas/admin.schema';
 import { CreateAdminDto } from './dto/create-admin.dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { UpdateAdminDto } from './dto/update-admin.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AdminsService {
-  create(createAdminDto: CreateAdminDto) {
-    return 'This action adds a new admin';
+  constructor(
+    @InjectModel(Admin.name) private readonly adminModel: Model<Admin>,
+  ) { }
+
+  async create(createAdminDto: CreateAdminDto): Promise<any> {
+    const adminExists: Admin = await this.adminModel.findOne({ email: createAdminDto.email });
+
+    if (adminExists) throw new HttpException('El usuario ya existe, correo registrado', HttpStatus.CONFLICT);
+
+    try {
+      const { password, ...rest } = createAdminDto;
+
+      const salt: string = await bcrypt.genSalt();
+      const hashedPassword: string = await bcrypt.hash(password, salt);
+      const newAdmin: Admin = new this.adminModel({
+        password: hashedPassword,
+        ...rest,
+      });
+      await newAdmin.save();
+
+      return { message: 'Administrador creado correctamente' };
+    } catch (error: any) {
+      throw new HttpException(`Error al crear el admin: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   findAll() {
