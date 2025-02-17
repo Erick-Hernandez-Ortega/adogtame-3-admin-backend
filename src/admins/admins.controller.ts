@@ -36,6 +36,6 @@ export class AdminsController {
   @Delete(':id')
   @ApiOperation({ summary: 'Eliminar un administrador por ID' })
   remove(@Param('id') id: string) {
-    return this.adminsService.remove(+id);
+    return this.adminsService.remove(id);
   }
 }

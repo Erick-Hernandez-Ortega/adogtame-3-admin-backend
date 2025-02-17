@@ -58,7 +58,17 @@ export class AdminsService {
     return `This action updates a #${id} admin`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} admin`;
+  async remove(id: string) {
+    const adminExists = await this.adminModel.findById(id).exec();
+
+    if (!adminExists) throw new HttpException('No se encontró el admin', HttpStatus.NOT_FOUND);
+
+    try {
+      await this.adminModel.findByIdAndDelete(id).exec();
+
+      return { message: 'Admin eliminado correctamente' };
+    } catch (error: any) {
+      throw new HttpException(`Error al eliminar el admin: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }
