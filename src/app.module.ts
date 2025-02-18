@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { PetsModule } from './pets/pets.module';
 import { AdopcionsModule } from './adopcions/adopcions.module';
 import { AdminsModule } from './admins/admins.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AdminsModule } from './admins/admins.module';
     PetsModule,
     AdopcionsModule,
     AdminsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
