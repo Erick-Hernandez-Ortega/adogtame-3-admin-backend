@@ -21,6 +21,7 @@ export class AuthService {
 
         const payload = { sub: admin._id, email: admin.email };
         return {
+            statusCode: HttpStatus.OK,
             access_token: await this.jwtService.signAsync(payload),
         };
     }
