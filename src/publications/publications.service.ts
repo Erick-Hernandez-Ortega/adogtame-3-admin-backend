@@ -64,7 +64,7 @@ export class PublicationsService {
     }
   }
 
-  async update(id: string, updatePublicationDto: UpdatePublicationDto) {
+  async update(id: string, updatePublicationDto: UpdatePublicationDto): Promise<any> {
     const publication: Publication = await this.publicationModel.findById(id).exec();
 
     if (!publication) throw new HttpException('No se encontró la publicación', HttpStatus.NOT_FOUND);
