@@ -68,7 +68,17 @@ export class PublicationsService {
     return `This action updates a #${id} publication`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} publication`;
+  async remove(id: string): Promise<any> {
+    const publication: Publication = await this.publicationModel.findById(id).exec();
+
+    if (!publication) throw new HttpException('No se encontró la publicación', HttpStatus.NOT_FOUND);
+  
+    try {
+      await publication.deleteOne();
+
+      return { message: 'Publicación eliminada correctamente' };
+    } catch (error) {
+      throw new HttpException(`Error al eliminar la publicación: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }

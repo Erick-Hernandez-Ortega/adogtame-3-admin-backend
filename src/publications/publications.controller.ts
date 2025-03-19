@@ -35,7 +35,8 @@ export class PublicationsController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Eliminar una publicacion' })
   remove(@Param('id') id: string) {
-    return this.publicationsService.remove(+id);
+    return this.publicationsService.remove(id);
   }
 }
