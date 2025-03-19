@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsMongoId, IsNotEmpty, isString, IsString } from "class-validator";
+import { IsEnum, IsMongoId, IsNotEmpty, IsOptional, isString, IsString } from "class-validator";
 
 export class CreatePublicationDto {
     @IsMongoId()
@@ -23,7 +23,7 @@ export class CreatePublicationDto {
 
     @IsEnum(['created', 'archived', 'completed', 'rejected', 'approved'])
     @ApiProperty({ example: 'created', description: 'Estado de la adopcion' })
-    @IsNotEmpty()
+    @IsOptional()
     status: string;
 
     @ApiProperty({ example: ['61d2a0a0a0a0a0a0a0a0a0a', '61d2a0a0a0a0a0a0a0a0a0a'], description: 'Id de los adoptantes interesados' })
