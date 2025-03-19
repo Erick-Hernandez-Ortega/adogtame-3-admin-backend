@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, BadRequestException } from '@nestjs/common';
 import { PublicationsService } from './publications.service';
 import { CreatePublicationDto } from './dto/create-publication.dto';
 import { UpdatePublicationDto } from './dto/update-publication.dto';
@@ -30,8 +30,13 @@ export class PublicationsController {
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Actualizar una publicacion por id' })
   update(@Param('id') id: string, @Body() updatePublicationDto: UpdatePublicationDto) {
-    return this.publicationsService.update(+id, updatePublicationDto);
+    if ('ownerId' in updatePublicationDto || 'petId' in updatePublicationDto) {
+      throw new BadRequestException('ownerId and petId should not be included in the update request');
+    }
+
+    return this.publicationsService.update(id, updatePublicationDto);
   }
 
   @Delete(':id')

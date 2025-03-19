@@ -64,8 +64,18 @@ export class PublicationsService {
     }
   }
 
-  update(id: number, updatePublicationDto: UpdatePublicationDto) {
-    return `This action updates a #${id} publication`;
+  async update(id: string, updatePublicationDto: UpdatePublicationDto) {
+    const publication: Publication = await this.publicationModel.findById(id).exec();
+
+    if (!publication) throw new HttpException('No se encontró la publicación', HttpStatus.NOT_FOUND);
+
+    try {
+      await this.publicationModel.findByIdAndUpdate(id, updatePublicationDto, { new: true }).exec();
+
+      return { message: 'Publicación actualizada correctamente' };
+    } catch (error: any) {
+      throw new HttpException(`Error al actualizar la publicación: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async remove(id: string): Promise<any> {
