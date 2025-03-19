@@ -21,6 +21,7 @@ export class PublicationsService {
 
     if (!pet) throw new HttpException('No se encontró la mascota', HttpStatus.NOT_FOUND);
     if (!user) throw new HttpException('No se encontró el usuario owner', HttpStatus.NOT_FOUND);
+    if (!pet.available) throw new HttpException('La mascota no está disponible', HttpStatus.CONFLICT);
 
     if (createPublicationDto.ownerId !== pet.owner.toString()) 
       throw new HttpException('El dueño de la mascota no coincide con el dueño de la publicación', HttpStatus.CONFLICT);
