@@ -1,4 +1,4 @@
-import { Prop, Schema } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
 
 @Schema({ timestamps: true, collection: 'publications', versionKey: false })
@@ -24,3 +24,5 @@ export class Publication extends Document {
     @Prop({ type: String, required: false })
     comments: string;
 }
+
+export const PublicationSchema = SchemaFactory.createForClass(Publication);
