@@ -18,6 +18,7 @@ export class PublicationsController {
   }
 
   @Get()
+  @ApiOperation({ summary: 'Obtener todas las publicaciones' })
   findAll() {
     return this.publicationsService.findAll();
   }

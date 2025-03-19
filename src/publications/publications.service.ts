@@ -15,7 +15,7 @@ export class PublicationsService {
     @InjectModel(Pet.name) private readonly petModel: Model<Pet>
   ) {}
 
-  async create(createPublicationDto: CreatePublicationDto) {
+  async create(createPublicationDto: CreatePublicationDto): Promise<any> {
     const pet: Pet = await this.petModel.findById(createPublicationDto.petId).exec();
     const user: User = await this.userModel.findById(createPublicationDto.ownerId).exec();
 
@@ -35,8 +35,18 @@ export class PublicationsService {
     }
   }
 
-  findAll() {
-    return `This action returns all publications`;
+  async findAll(): Promise<Publication[]> {
+    try {
+      const publications: Publication[] = await this.publicationModel
+        .find()
+        .populate('ownerId', 'name')
+        .populate('petId', 'name')
+        .exec();
+
+      return publications;
+    } catch (error: any) {
+      throw new HttpException(`Error al obtener las publicaciones: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   findOne(id: number) {
