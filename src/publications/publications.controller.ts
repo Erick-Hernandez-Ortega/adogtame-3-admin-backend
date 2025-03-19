@@ -24,8 +24,9 @@ export class PublicationsController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Obtener una publicacion por id' })
   findOne(@Param('id') id: string) {
-    return this.publicationsService.findOne(+id);
+    return this.publicationsService.findOne(id);
   }
 
   @Patch(':id')

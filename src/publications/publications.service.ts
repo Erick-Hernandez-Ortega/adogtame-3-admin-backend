@@ -49,8 +49,18 @@ export class PublicationsService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} publication`;
+  async findOne(id: string): Promise<Publication> {
+    try {
+      const publication: Publication = await this.publicationModel
+        .findById(id)
+        .populate('ownerId', '-password -updatedAt -createdAt -isTokenRemoved')
+        .populate('petId', '-updatedAt -createdAt -owner')
+        .exec();
+
+      return publication;
+    } catch (error: any) {
+      throw new HttpException(`Error al obtener la publicación: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   update(id: number, updatePublicationDto: UpdatePublicationDto) {
