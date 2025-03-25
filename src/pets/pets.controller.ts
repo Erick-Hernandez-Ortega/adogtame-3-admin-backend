@@ -23,6 +23,12 @@ export class PetsController {
     return this.petsService.findAll();
   }
 
+  @Get('names')
+  @ApiOperation({ summary: 'Obtener todos los nombres de las mascotas' })
+  findAllNames() {
+    return this.petsService.findAllNames();
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Obtener una mascota por ID' })
   findOne(@Param('id') id: string) {
