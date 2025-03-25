@@ -91,4 +91,12 @@ export class UsersService {
       throw new HttpException(`Error al eliminar el usuario: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  async findAllNames(): Promise<User[]> {
+    try {
+      return await this.userModel.find().select('name').exec();
+    } catch (error: any) {
+      throw new HttpException(`Error al obtener los nombres de los usuarios: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }

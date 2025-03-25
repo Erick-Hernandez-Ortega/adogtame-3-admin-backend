@@ -76,4 +76,12 @@ export class PetsService {
       throw new HttpException(`Error al eliminar la mascota: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  async findAllNames(): Promise<Pet[]> {
+    try {
+      return await this.petModel.find().select('name').exec();
+    } catch (error: any) {
+      throw new HttpException(`Error al obtener los nombres de las mascotas: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }
