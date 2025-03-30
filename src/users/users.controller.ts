@@ -30,6 +30,12 @@ export class UsersController {
     return this.usersService.findAllNames();
   }
 
+  @Get('name/:id')
+  @ApiOperation({ summary: 'Obtener un nombre de un usuario por ID' })
+  findName(@Param('id') id: string): Promise<User> {
+    return this.usersService.findNameById(id);
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Obtener un usuario por su ID' })
   findOne(@Param('id') id: string): Promise<User> {

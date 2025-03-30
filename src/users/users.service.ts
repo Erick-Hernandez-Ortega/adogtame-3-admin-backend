@@ -99,4 +99,12 @@ export class UsersService {
       throw new HttpException(`Error al obtener los nombres de los usuarios: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  async findNameById(id: string): Promise<User> {
+    try {
+      return await this.userModel.findById(id).select('name').exec();
+    } catch (error: any) {
+      throw new HttpException(`Error al obtener el nombre del usuario: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }
