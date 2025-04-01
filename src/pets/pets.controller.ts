@@ -29,6 +29,12 @@ export class PetsController {
     return this.petsService.findAllNames();
   }
 
+  @Get('names/:ownerId')
+  @ApiOperation({ summary: 'Obtener el nombre las mascotas por owner ID' })
+  findName(@Param('ownerId') id: string) {
+    return this.petsService.findNamesByOwnerId(id);
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Obtener una mascota por ID' })
   findOne(@Param('id') id: string) {
