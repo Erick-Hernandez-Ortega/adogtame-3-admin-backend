@@ -84,4 +84,12 @@ export class PetsService {
       throw new HttpException(`Error al obtener los nombres de las mascotas: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  async findNamesByOwnerId(ownerId: string): Promise<Pet[]> {
+    try {
+      return await this.petModel.find({ owner: ownerId }).select('name').exec();
+    } catch (error: any) {
+      throw new HttpException(`Error al obtener los nombres de las mascotas del dueño: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }
