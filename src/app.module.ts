@@ -9,6 +9,7 @@ import { AdopcionsModule } from './adopcions/adopcions.module';
 import { AdminsModule } from './admins/admins.module';
 import { AuthModule } from './auth/auth.module';
 import { PublicationsModule } from './publications/publications.module';
+import { StatsModule } from './stats/stats.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { PublicationsModule } from './publications/publications.module';
     AdminsModule,
     AuthModule,
     PublicationsModule,
+    StatsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
