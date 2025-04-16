@@ -8,8 +8,14 @@ import { AuthGuard } from 'src/auth/guards/auth.guard';
 @UseGuards(AuthGuard)
 export class StatsController {
   constructor(private readonly statsService: StatsService) {}
+
   @Get('pets-availables')
   findAllPetsAvailables() {
     return this.statsService.findAllPetsAvailables();
+  }
+  
+  @Get('users')
+  findAllUsers() {
+    return this.statsService.findAllUsers();
   }
 }
