@@ -64,4 +64,8 @@ export class StatsService {
       throw new HttpException(`Error al obtener las estadísticas: ${error?.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     } 
   }
+  
+  async findAllPublications() {
+    
+  }
 }
