@@ -13,11 +13,13 @@ export class StatsService {
       const totalAvailables: number = pets.length;
       const availableDogs: number = pets.filter(pet => pet.typeOfPet === 'Dog').length;
       const availableCats: number = pets.filter(pet => pet.typeOfPet === 'Cat').length;
+      const availableOthers: number = pets.filter(pet => pet.typeOfPet === 'Other').length;
       
       return {
-        count: totalAvailables,
+        count_total: totalAvailables,
         dogs: availableDogs,
-        cats: availableCats
+        cats: availableCats,
+        others: availableOthers
       };
     } catch (error: any) {
       throw new HttpException(`Error al obtener las estadísticas: ${error?.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
