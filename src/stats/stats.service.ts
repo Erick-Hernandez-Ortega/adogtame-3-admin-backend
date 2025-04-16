@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { Adopcion } from 'src/adopcions/schemas/adopcion.schema';
 import { Pet } from 'src/pets/schemas/pet.schema';
 import { User } from 'src/users/schemas/user.schema';
 
@@ -9,6 +10,7 @@ export class StatsService {
   constructor(
     @InjectModel(Pet.name) private readonly petModel: Model<Pet>,
     @InjectModel(User.name) private readonly userModel: Model<User>,
+    @InjectModel(Adopcion.name) private readonly adoptionModel: Model<Adopcion>,
   ) {}
 
   async findAllPetsAvailables() {
@@ -40,5 +42,26 @@ export class StatsService {
     } catch (error: any) {
       throw new HttpException(`Error al obtener las estadísticas: ${error?.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+  
+  async findAllAdoptions() {
+    try {
+      const adoptions: Adopcion[] = await this.adoptionModel.find().exec();
+      const count_total = adoptions.length;
+      const total_pending: number = adoptions.filter(adoption => adoption.status === 'pending').length;
+      const total_approved: number = adoptions.filter(adoption => adoption.status === 'approved').length;
+      const total_rejected: number = adoptions.filter(adoption => adoption.status === 'rejected').length;
+      const total_completed: number = adoptions.filter(adoption => adoption.status === 'completed').length;
+      
+      return {
+        count_total,
+        total_pending,
+        total_approved,
+        total_rejected,
+        total_completed
+      }
+    } catch (error: any) {
+      throw new HttpException(`Error al obtener las estadísticas: ${error?.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    } 
   }
 }

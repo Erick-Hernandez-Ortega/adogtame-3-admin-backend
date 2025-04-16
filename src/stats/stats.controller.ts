@@ -18,4 +18,9 @@ export class StatsController {
   findAllUsers() {
     return this.statsService.findAllUsers();
   }
+  
+  @Get('adoptions')
+  findAllAdoptions() {
+    return this.statsService.findAllAdoptions()
+  }
 }
