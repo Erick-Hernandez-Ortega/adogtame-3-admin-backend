@@ -23,12 +23,12 @@ export class StatsService {
       const availableCats: number = pets.filter(pet => pet.typeOfPet === 'Cat').length;
       const availableOthers: number = pets.filter(pet => pet.typeOfPet === 'Other').length;
       
-      return {
-        count_total: totalAvailables,
-        dogs: availableDogs,
-        cats: availableCats,
-        others: availableOthers
-      };
+      return [
+        { label : 'Mascotas', count: totalAvailables },
+        { label : 'Perros', count: availableDogs },
+        { label : 'Gatos', count: availableCats },
+        { label : 'Otros', count: availableOthers },
+      ]
     } catch (error: any) {
       throw new HttpException(`Error al obtener las estadísticas: ${error?.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -39,7 +39,8 @@ export class StatsService {
       const users: User[] = await this.userModel.find().exec();
       
       return {
-        count_total: users.length
+        label: 'Usuarios',
+        count: users.length
       }
     } catch (error: any) {
       throw new HttpException(`Error al obtener las estadísticas: ${error?.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -55,13 +56,13 @@ export class StatsService {
       const total_rejected: number = adoptions.filter(adoption => adoption.status === 'rejected').length;
       const total_completed: number = adoptions.filter(adoption => adoption.status === 'completed').length;
       
-      return {
-        count_total,
-        total_pending,
-        total_approved,
-        total_rejected,
-        total_completed
-      }
+      return [
+        { label : 'Adopciones', count: count_total },
+        { label : 'Pendientes', count: total_pending },
+        { label : 'Aprobadas', count: total_approved },
+        { label : 'Rechazadas', count: total_rejected },
+        { label : 'Completadas', count: total_completed },
+      ]
     } catch (error: any) {
       throw new HttpException(`Error al obtener las estadísticas: ${error?.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     } 
@@ -77,14 +78,14 @@ export class StatsService {
       const total_rejected: number = publications.filter(publication => publication.status === 'rejected').length;
       const total_approved: number = publications.filter(publication => publication.status === 'approved').length;
       
-      return {
-        count_total,
-        total_created,
-        total_archived,
-        total_completed,
-        total_rejected,
-        total_approved,
-      }
+      return [
+        { label : 'Publicaciones', count: count_total },
+        { label : 'Creadas', count: total_created },
+        { label : 'Archivadas', count: total_archived },
+        { label : 'Completadas', count: total_completed },
+        { label : 'Rechazadas', count: total_rejected },
+        { label : 'Aprobadas', count: total_approved },
+      ]
     } catch (error: any) {
       throw new HttpException(`Error al obtener las estadísticas: ${error?.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
