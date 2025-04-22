@@ -38,4 +38,10 @@ export class StatsController {
   findAllAdmins() {
     return this.statsService.findAllAdmins();
   }
+
+  @Get('users/months')
+  @ApiOperation({ summary: 'Obtener usuarios registrados por mes' })
+  findAllUsersByMonth() {
+    return this.statsService.findAllUsersByMonth();
+  }
 }
