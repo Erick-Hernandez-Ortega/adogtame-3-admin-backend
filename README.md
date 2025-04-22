@@ -1,85 +1,48 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🐾 Adogtame Admin - Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este es el backend del proyecto **Adogtame Admin**, una plataforma para la adopción de mascotas. Está construido con **NestJS** y proporciona una API RESTful segura, documentada y robusta para la gestión de usuarios, mascotas y solicitudes de adopción.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Tecnologías utilizadas
 
-## Description
+- [NestJS](https://nestjs.com/) - Framework progresivo de Node.js
+- [TypeScript](https://www.typescriptlang.org/) - Tipado estático para JavaScript
+- [MongoDB](https://www.mongodb.com/) + [Mongoose](https://mongoosejs.com/) - Base de datos NoSQL y ODM
+- [JWT](https://jwt.io/) - Autenticación basada en tokens
+- [bcrypt](https://github.com/kelektiv/node.bcrypt.js) - Encriptación de contraseñas
+- [class-validator](https://github.com/typestack/class-validator) - Validación de datos
+- [Swagger](https://swagger.io/) - Documentación automática de la API
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🔐 Autenticación
 
-## Project setup
+El sistema usa **JWT** para autenticación, con roles de usuario como `admin` y `adoptante`. Las rutas están protegidas mediante `Guards` personalizados.
 
-```bash
-$ npm install
-```
+## 🧪 Validaciones
 
-## Compile and run the project
+Se implementan validaciones con `class-validator` para asegurar la integridad de los datos tanto en creación como en actualización de entidades.
 
-```bash
-# development
-$ npm run start
+## 🔐 Seguridad
 
-# watch mode
-$ npm run start:dev
+- Contraseñas encriptadas con `bcrypt`
+- Rutas protegidas con JWT y `Guards`
+- Buenas prácticas en manejo de errores
 
-# production mode
-$ npm run start:prod
-```
+## 📄 Documentación Swagger
 
-## Run tests
+Una vez levantado el servidor, puedes acceder a la documentación Swagger en:
+
+`http://localhost:3000/docs`
+
+## 📦 Instalación
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm install
 ```
 
-## Resources
+## 🚀 Ejecución
 
-Check out a few resources that may come in handy when working with NestJS:
+```bash
+npm run start:dev
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## 📝 Contribuciones
+Si deseas contribuir, abre un PR o issue. ¡Todas las mejoras son bienvenidas!
