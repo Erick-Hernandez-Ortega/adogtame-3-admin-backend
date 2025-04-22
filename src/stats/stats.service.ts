@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { Admin } from 'src/admins/schemas/admin.schema';
 import { Adopcion } from 'src/adopcions/schemas/adopcion.schema';
 import { Pet } from 'src/pets/schemas/pet.schema';
 import { Publication } from 'src/publications/schemas/publication.schemas';
@@ -13,6 +14,7 @@ export class StatsService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
     @InjectModel(Adopcion.name) private readonly adoptionModel: Model<Adopcion>,
     @InjectModel(Publication.name) private readonly publicationModel: Model<Publication>,
+    @InjectModel(Admin.name) private readonly adminModel: Model<Admin>,
   ) {}
 
   async findAllPetsAvailables() {
@@ -87,6 +89,20 @@ export class StatsService {
         { label: 'Rechazadas', count: total_rejected, color: '#E74C3C' },
         { label: 'Aprobadas', count: total_approved, color: '#F1C40F' },
       ];
+    } catch (error: any) {
+      throw new HttpException(`Error al obtener las estadísticas: ${error?.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async findAllAdmins() {
+    try {
+      const admins: Admin[] = await this.adminModel.find().exec();
+      const count_total: number = admins.length;
+      
+      return {
+        label: 'Admins',
+        count: count_total
+      }
     } catch (error: any) {
       throw new HttpException(`Error al obtener las estadísticas: ${error?.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }

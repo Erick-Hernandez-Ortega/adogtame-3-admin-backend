@@ -32,4 +32,10 @@ export class StatsController {
   findAllPublications() {
     return this.statsService.findAllPublications();
   }
+
+  @Get('admins')
+  @ApiOperation({ summary: 'Obtener todos los admins' })
+  findAllAdmins() {
+    return this.statsService.findAllAdmins();
+  }
 }
