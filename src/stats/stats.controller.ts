@@ -32,4 +32,16 @@ export class StatsController {
   findAllPublications() {
     return this.statsService.findAllPublications();
   }
+
+  @Get('admins')
+  @ApiOperation({ summary: 'Obtener todos los admins' })
+  findAllAdmins() {
+    return this.statsService.findAllAdmins();
+  }
+
+  @Get('users/months')
+  @ApiOperation({ summary: 'Obtener usuarios registrados por mes' })
+  findAllUsersByMonth() {
+    return this.statsService.findAllUsersByMonth();
+  }
 }

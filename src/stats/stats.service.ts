@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { Admin } from 'src/admins/schemas/admin.schema';
 import { Adopcion } from 'src/adopcions/schemas/adopcion.schema';
 import { Pet } from 'src/pets/schemas/pet.schema';
 import { Publication } from 'src/publications/schemas/publication.schemas';
@@ -8,12 +9,18 @@ import { User } from 'src/users/schemas/user.schema';
 
 @Injectable()
 export class StatsService {
+  private readonly MONTHS_IN_SPANISH: string[] = [
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+  ];
+
   constructor(
     @InjectModel(Pet.name) private readonly petModel: Model<Pet>,
     @InjectModel(User.name) private readonly userModel: Model<User>,
     @InjectModel(Adopcion.name) private readonly adoptionModel: Model<Adopcion>,
     @InjectModel(Publication.name) private readonly publicationModel: Model<Publication>,
-  ) {}
+    @InjectModel(Admin.name) private readonly adminModel: Model<Admin>,
+  ) { }
 
   async findAllPetsAvailables() {
     try {
@@ -22,22 +29,22 @@ export class StatsService {
       const availableDogs: number = pets.filter(pet => pet.typeOfPet === 'Dog').length;
       const availableCats: number = pets.filter(pet => pet.typeOfPet === 'Cat').length;
       const availableOthers: number = pets.filter(pet => pet.typeOfPet === 'Other').length;
-      
+
       return [
-        { label : 'Mascotas', count: totalAvailables, color: '#64CCC9' },
-        { label : 'Perros', count: availableDogs, color: '#FFD166'},
-        { label : 'Gatos', count: availableCats, color: '#F78888'},
-        { label : 'Otros', count: availableOthers, color: '#B2B2B2' },
+        { label: 'Mascotas', count: totalAvailables, color: '#64CCC9' },
+        { label: 'Perros', count: availableDogs, color: '#FFD166' },
+        { label: 'Gatos', count: availableCats, color: '#F78888' },
+        { label: 'Otros', count: availableOthers, color: '#B2B2B2' },
       ]
     } catch (error: any) {
       throw new HttpException(`Error al obtener las estadísticas: ${error?.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  
+
   async findAllUsers(): Promise<number | any> {
     try {
       const users: User[] = await this.userModel.find().exec();
-      
+
       return {
         label: 'Usuarios',
         count: users.length,
@@ -47,7 +54,7 @@ export class StatsService {
       throw new HttpException(`Error al obtener las estadísticas: ${error?.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  
+
   async findAllAdoptions() {
     try {
       const adoptions: Adopcion[] = await this.adoptionModel.find().exec();
@@ -56,7 +63,7 @@ export class StatsService {
       const total_approved: number = adoptions.filter(adoption => adoption.status === 'approved').length;
       const total_rejected: number = adoptions.filter(adoption => adoption.status === 'rejected').length;
       const total_completed: number = adoptions.filter(adoption => adoption.status === 'completed').length;
-      
+
       return [
         { label: 'Adopciones', count: count_total, color: '#FDE74C' },
         { label: 'Pendientes', count: total_pending, color: '#A0E7E5' },
@@ -66,9 +73,9 @@ export class StatsService {
       ];
     } catch (error: any) {
       throw new HttpException(`Error al obtener las estadísticas: ${error?.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
-    } 
+    }
   }
-  
+
   async findAllPublications() {
     try {
       const publications: Publication[] = await this.publicationModel.find().exec();
@@ -78,7 +85,7 @@ export class StatsService {
       const total_completed: number = publications.filter(publication => publication.status === 'completed').length;
       const total_rejected: number = publications.filter(publication => publication.status === 'rejected').length;
       const total_approved: number = publications.filter(publication => publication.status === 'approved').length;
-      
+
       return [
         { label: 'Publicaciones', count: count_total, color: '#8E44AD' },
         { label: 'Creadas', count: total_created, color: '#3498DB' },
@@ -87,6 +94,63 @@ export class StatsService {
         { label: 'Rechazadas', count: total_rejected, color: '#E74C3C' },
         { label: 'Aprobadas', count: total_approved, color: '#F1C40F' },
       ];
+    } catch (error: any) {
+      throw new HttpException(`Error al obtener las estadísticas: ${error?.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async findAllAdmins() {
+    try {
+      const admins: Admin[] = await this.adminModel.find().exec();
+      const count_total: number = admins.length;
+
+      return {
+        label: 'Admins',
+        count: count_total
+      }
+    } catch (error: any) {
+      throw new HttpException(`Error al obtener las estadísticas: ${error?.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async findAllUsersByMonth() {
+    try {
+      const users = await this.userModel.aggregate([
+        {
+          $group: {
+            _id: {
+              year: { $year: '$createdAt' },
+              month: { $month: '$createdAt' },
+            },
+            count: { $sum: 1 },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            monthNumber: '$_id.month',
+            year: '$_id.year',
+            count: 1,
+          },
+        },
+      ]);
+
+      const currentYear: number = new Date().getFullYear();
+
+      const monthlyData = this.MONTHS_IN_SPANISH.map((monthName: string, index: number) => {
+        const monthNumber: number = index + 1;
+        const existingMonth = users.find(
+          (item) => item.monthNumber === monthNumber && item.year === currentYear,
+        );
+
+        return {
+          month: monthName,
+          year: currentYear,
+          count: existingMonth ? existingMonth.count : 0,
+        };
+      });
+
+      return monthlyData;
     } catch (error: any) {
       throw new HttpException(`Error al obtener las estadísticas: ${error?.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
