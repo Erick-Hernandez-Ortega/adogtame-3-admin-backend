@@ -1,6 +1,6 @@
-# 🐾 Adogtame Admin - Backend
+# 🐾 Adogtame 3 Admin - Backend
 
-Este es el backend del proyecto **Adogtame Admin**, una plataforma para la adopción de mascotas. Está construido con **NestJS** y proporciona una API RESTful segura, documentada y robusta para la gestión de usuarios, mascotas y solicitudes de adopción.
+Este es el backend del proyecto **Adogtame 3 Admin**, una plataforma para la adopción de mascotas. Está construido con **NestJS** y proporciona una API RESTful segura, documentada y robusta para la gestión de usuarios, mascotas y solicitudes de adopción.
 
 ## 🚀 Tecnologías utilizadas
 
