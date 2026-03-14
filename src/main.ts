@@ -14,7 +14,7 @@ async function bootstrap() {
 
   const document: OpenAPIObject = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
-  // ejeme
+  // ejeme eje
 
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(process.env.PORT || 3000);
